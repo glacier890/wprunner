@@ -21,6 +21,7 @@
  if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 
+include( plugin_dir_path( __FILE__ ) . "includes/class-runner-post-types.php");
 	 /**
 	  * Main WPRunner Class
 	  *
@@ -65,6 +66,9 @@
 	public function __construct() {
 		echo '<h1>Wp-Runner works</h1>';
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action('wp', array($this, 'load_scripts'));
+		$runner_post_types = new runner_post_types();
+
 /*
 		$this->constants();
 		$this->includes();
@@ -73,6 +77,10 @@
 		do_action( 'wprunner_loaded' );
 		*/
 	}
+
+public function load_scripts(){
+	wp_enqueue_script('Load_Scripts', plugins_url('js/runner.js', __FILE__), array('jquery'));
+}
 
 	public function admin_menu(){
 		add_menu_page( 'Runners Settings Page', 'WP Runner', 'manage_options', 'runners_settings_page', array($this, 'runner_setting_page') );
