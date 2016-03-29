@@ -5,8 +5,8 @@ class ManageRunners {
 	*/
 	public function __construct(){
 		echo 'New tab created.';
-		add_action( 'admin_init', array( $this, 'sandbox_initialize_theme_options' ) );
-		add_action( 'admin_init', array( $this, 'sandbox_general_options_callback' ) );
+		add_action( 'wp', array( $this, 'sandbox_initialize_theme_options' ) );
+
 	}
 
 	public function sandbox_initialize_theme_options() {
@@ -16,13 +16,28 @@ class ManageRunners {
 					'general_settings_section',         // ID used to identify this section and with which to register options
 					'Sandbox Options',                  // Title to be displayed on the administration page
 					array( $this, 'sandbox_general_options_callback'), // Callback used to render the description of the section
-					'permalink'
-				);                           // Page on which to add this section of options
+					'runners_settings_page&type=managerunners'
+				);
+
+				// Add the field with the names and function to use for our new
+ 	// settings, put it in our new section
+		 	add_settings_field(
+				'show_header',
+				'Header',
+				array($this, 'sandbox_toggle_header_callback'),
+				'runners_settings_page',
+				'general_settings_section',
+				'Activate this setting to display the header.'
+			);                         // Page on which to add this section of options
 
 				}
 
 				public function sandbox_general_options_callback(){
-					echo 'New Settings page';
+					echo 'Check this area if you want the runners to be displayed in the table.';
+				}
+
+				public function sandbox_toggle_header_callback(){
+					$html = '<input type="checkbox" id="showrunners" name="runner_options" value="1" ' . checked( 1, isset( $options['show_runner'] ) ? $options['show_footer'] : 0, false ) . '/>';
 				}
 
 
